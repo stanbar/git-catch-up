@@ -1,5 +1,4 @@
 import os
-import sys
 from pathlib import Path
 from git import Repo
 from datetime import datetime, date
@@ -61,10 +60,6 @@ def parse_changes(repo, base_path):
     print(f"{len(untracked_changes)} files untracked")
     print(f"{len(deleted)} files deleted")
 
-def dry_commit():
-    for date, changed_files in changesDict.items():
-        print(f"{date} - {len(changed_files)} files", changed_files)
-
 def commit_changes(repo):
     for date, changed_files in changesDict.items():
         repo.index.add(list(changed_files))
@@ -73,13 +68,8 @@ def commit_changes(repo):
         print(f"Committing {len(changed_files)} files at {datetime.fromisoformat(date).isoformat()} ")
         repo.index.commit("Update")
 
-def list_diff_file_paths(repo):
-    return [item.a_path for item in repo.index.diff(None)]
 
-
-base_url = sys.argv[0] "/Users/stanbar/Library/Mobile Documents/iCloud~md~obsidian/Documents/Slip-box"
-
-base_path = Path(base_url)
-repo = Repo(base_url)
+base_path = Path(os.getcwd())
+repo = Repo(os.getcwd())
 parse_changes(repo, base_path)
 commit_changes(repo)
