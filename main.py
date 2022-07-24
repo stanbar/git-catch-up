@@ -5,7 +5,6 @@ from datetime import datetime, date
 from collections import OrderedDict
 
 
-changesDict = OrderedDict()
 
 def get_creation_time(path : Path) -> str:
     return datetime.fromtimestamp(path.stat().st_ctime).strftime("%Y-%m-%d")
@@ -14,7 +13,8 @@ def get_modification_time(path : Path) -> str:
     return datetime.fromtimestamp(path.stat().st_mtime).strftime("%Y-%m-%d")
 
 
-def parse_changes(repo, base_path):
+def generate_date_to_files_change_dictionary(repo, base_path) -> OrderedDict:
+    changesDict = OrderedDict()
     untracked = repo.untracked_files
     untracked_changes = list()
     for file in untracked:
@@ -59,8 +59,9 @@ def parse_changes(repo, base_path):
     print(f"{len(tracked_changes)} files changed")
     print(f"{len(untracked_changes)} files untracked")
     print(f"{len(deleted)} files deleted")
+    return changesDict
 
-def commit_changes(repo):
+def commit_changes(repo, changesDict: OrderedDict):
     for date, changed_files in changesDict.items():
         repo.index.add(list(changed_files))
         os.environ["GIT_AUTHOR_DATE"] = datetime.fromisoformat(date).isoformat()
@@ -71,5 +72,5 @@ def commit_changes(repo):
 
 base_path = Path(os.getcwd())
 repo = Repo(os.getcwd())
-parse_changes(repo, base_path)
-commit_changes(repo)
+changesDict = generate_date_to_files_change_dictionary(repo, base_path)
+commit_changes(repo, changesDict)
