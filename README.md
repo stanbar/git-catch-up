@@ -1,14 +1,16 @@
-# git-changes-tracker
+# git-catch-up
 
-Track daily changes in a directory using git.
+Catch up uncommited files keeping modification date.
 
-# Usage
+# Environment
 
-1. Activate virtual env using `pipenv shell`
-2. Change to the target repo directory
-3. Run `python <path to git-changes-tracker>/main.py`
+1. Set virtual environment `pipenv shell`.
 
 # Installation
 
-1. Bundle executable. Run `pyinstaller --onefile main.py`
+1. Bundle executable. Run `pyinstaller --onefile main.py`.
 2. Move executable to `$PATH`. Run `mv dist/main /usr/local/bin/git-catch-up` (or other OS specific location).
+
+# Usage
+
+Execute `git-catch-up` within the target repository's directory.
